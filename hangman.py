@@ -12,12 +12,64 @@ def pa():
         pa()
 
 def play():
+    hangmanpics = ['''
+  +---+
+  |   |
+      |
+      |
+      |
+      |
+=========''', '''
+  +---+
+  |   |
+  O   |
+      |
+      |
+      |
+=========''', '''
+  +---+
+  |   |
+  O   |
+  |   |
+      |
+      |
+=========''', '''
+  +---+
+  |   |
+  O   |
+ /|   |
+      |
+      |
+=========''', '''
+  +---+
+  |   |
+  O   |
+ /|\  |
+      |
+      |
+=========''', '''
+  +---+
+  |   |
+  O   |
+ /|\  |
+ /    |
+      |
+=========''', '''
+  +---+
+  |   |
+  O   |
+ /|\  |
+ / \  |
+      |
+=========''']
+
     words = []
     wordArray = []
     censoredWordArray = []
     letterIndex = 0
     word = ""
-    tries = 10
+    tries = 0
+    attempts = 7
     wordLength = 0
     guesses = 0
     wordFile = open("words.txt", "r")
@@ -36,10 +88,12 @@ def play():
     del censoredWordArray[-1]
     del wordArray[-1]
 
-    print(word)
     print("Word has: " + str(len(wordArray)) + " letters.")
     print(''.join(censoredWordArray))
+    print(hangmanpics[0])
+    
     while censoredWordArray != wordArray:
+        
         guess = input(">")
         guesses += 1
         if len(guess) > 1 or len(guess) < 1:
@@ -47,21 +101,27 @@ def play():
         
         if len(guess) == 1:
             if guess in wordArray:
+                if tries == 6:
+                    break
                 print("Correct")
                 letterIndex = wordArray.index(guess)
                 censoredWordArray[letterIndex] = guess
+                if tries != 0:
+                    print(hangmanpics[tries])
                 print(''.join(censoredWordArray))
             if guess not in wordArray:
+                tries += 1
+                if tries == 6:
+                    break
                 print("Incorrect")
-                tries -= 1
+                print(hangmanpics[tries])
                 print(''.join(censoredWordArray))
-            if tries == 0:
-                print("You lose.")
-                print("The word was: " + word)
-                break
-        print("Tries remaining: " + str(tries))
 
-    if tries > 0:
+        print("Tries remaining: " + str(attempts - tries))
+    if tries == 6:
+        print(hangmanpics[6])
+        print("You lose")
+    else:
         print("You won in " + str(guesses) + " guesses.")
         if guesses == len(wordArray):
             print("Perfect game!")
