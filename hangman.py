@@ -6,6 +6,7 @@ censoredWordArray = []
 letterIndex = 0
 word = ""
 guesses = 0
+tries = 10
 wordLength = 0
 
 wordFile = open("words.txt", "r")
@@ -26,7 +27,6 @@ del wordArray[-1]
 
 print("Word has: " + str(len(wordArray)) + " letters.")
 print(''.join(censoredWordArray))
-
 while censoredWordArray != wordArray:
     guess = input(">")
     
@@ -42,7 +42,15 @@ while censoredWordArray != wordArray:
             print(''.join(censoredWordArray))
         if guess not in wordArray:
             print("Incorrect")
+            tries -= 1
             print(''.join(censoredWordArray))
-print("You won in " + str(guesses) + " guesses.")
-if guesses == len(wordArray):
-    print("Perfect game!")
+        if tries == 0:
+            print("You lose.")
+            print("The word was: " + word)
+            break
+    print("Tries remaining: " + str(tries))
+
+if tries > 0:
+    print("You won in " + str(guesses) + " guesses.")
+    if guesses == len(wordArray):
+        print("Perfect game!")
